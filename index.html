@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>咖啡禮盒扭蛋抽獎</title>
+  <style>
+    :root {
+      --coffee-1: #F29F05;
+      --coffee-2: #A67458;
+      --coffee-3: #730202;
+      --coffee-4: #BF0F0F;
+      --coffee-5: #F29999;
+      --cream: #fffaf3;
+      --text: #3a1f13;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 20% 10%, rgba(242,159,5,0.25), transparent 40%),
+        radial-gradient(circle at 90% 20%, rgba(242,153,153,0.25), transparent 35%),
+        linear-gradient(160deg, #fff8ef 0%, #fde7d2 55%, #f8dac9 100%);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: min(920px, 100%);
+      background: var(--cream);
+      border-radius: 24px;
+      box-shadow: 0 15px 40px rgba(115,2,2,.2);
+      overflow: hidden;
+      border: 2px solid rgba(166,116,88,.25);
+    }
+
+    .header {
+      background: linear-gradient(130deg, var(--coffee-4), var(--coffee-3));
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .header h1 {
+      margin: 0;
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      letter-spacing: 1px;
+    }
+
+    .header p {
+      margin: 10px 0 0;
+      opacity: .92;
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      padding: 24px;
+    }
+
+    @media (max-width: 760px) {
+      .content { grid-template-columns: 1fr; }
+    }
+
+    .capsule-machine {
+      background: linear-gradient(180deg, #fff, #fff1e5);
+      border-radius: 20px;
+      border: 2px dashed rgba(166,116,88,.45);
+      padding: 20px;
+      display: grid;
+      place-items: center;
+      gap: 16px;
+    }
+
+    .glass {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 20%, rgba(255,255,255,.85), rgba(255,255,255,.12) 45%, rgba(242,159,5,.15) 100%),
+        linear-gradient(145deg, rgba(166,116,88,.25), rgba(242,153,153,.18));
+      border: 6px solid var(--coffee-2);
+      display: grid;
+      place-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .beans {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .5;
+      background-image: radial-gradient(circle at 20% 70%, #a67458 0 8px, transparent 9px),
+                        radial-gradient(circle at 70% 40%, #f29f05 0 7px, transparent 8px),
+                        radial-gradient(circle at 55% 80%, #730202 0 9px, transparent 10px),
+                        radial-gradient(circle at 35% 25%, #bf0f0f 0 6px, transparent 7px);
+    }
+
+    .capsule {
+      width: 112px;
+      height: 112px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      color: #fff;
+      font-size: 1.1rem;
+      background: linear-gradient(140deg, var(--coffee-4), var(--coffee-1));
+      border: 4px solid #fff;
+      box-shadow: 0 8px 20px rgba(115,2,2,.25);
+      transform-origin: center;
+      transition: transform .25s ease;
+    }
+
+    .capsule.roll { animation: roll .8s ease; }
+
+    @keyframes roll {
+      0% { transform: translateY(0) rotate(0deg); }
+      20% { transform: translateY(-6px) rotate(90deg); }
+      40% { transform: translateY(4px) rotate(180deg); }
+      60% { transform: translateY(-5px) rotate(260deg); }
+      100% { transform: translateY(0) rotate(360deg); }
+    }
+
+    .handle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      background: radial-gradient(circle at 35% 30%, #fff, #f2d3bf 35%, #a67458 100%);
+      box-shadow: inset 0 4px 7px rgba(255,255,255,.7), 0 8px 14px rgba(0,0,0,.25);
+      font-size: 1.8rem;
+      transition: transform .2s ease;
+    }
+
+    .handle:hover { transform: scale(1.03); }
+    .handle:disabled { cursor: not-allowed; opacity: .6; }
+
+    .info {
+      background: #fff;
+      border-radius: 20px;
+      border: 1px solid rgba(166,116,88,.35);
+      padding: 18px;
+      display: grid;
+      gap: 14px;
+      align-content: start;
+    }
+
+    .prices {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    .price-tag {
+      text-align: center;
+      border-radius: 12px;
+      padding: 10px 8px;
+      background: #fff8f1;
+      border: 1px solid #f3d7c3;
+    }
+
+    .price-tag b { display:block; font-size: 1.1rem; }
+
+    .result {
+      border-radius: 14px;
+      padding: 14px;
+      background: linear-gradient(130deg, rgba(242,159,5,.18), rgba(242,153,153,.2));
+      border: 1px solid rgba(191,15,15,.3);
+      min-height: 86px;
+      display: grid;
+      align-items: center;
+    }
+
+    .small {
+      font-size: .9rem;
+      color: #6a4d3e;
+      margin: 0;
+    }
+
+    .cta {
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--coffee-1), var(--coffee-4));
+      color: #fff;
+      padding: 12px 16px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <main class="card">
+    <section class="header">
+      <h1>☕ 咖啡市集｜禮盒扭蛋優惠抽獎</h1>
+      <p>轉一下扭蛋，帶走你的咖啡禮盒驚喜價！</p>
+    </section>
+
+    <section class="content">
+      <div class="capsule-machine">
+        <div class="glass">
+          <div class="beans"></div>
+          <div class="capsule" id="capsule">START</div>
+        </div>
+        <button class="handle" id="drawBtn" aria-label="轉扭蛋">🎯</button>
+        <p class="small">點擊旋鈕即可抽出折扣球</p>
+      </div>
+
+      <aside class="info">
+        <h2 style="margin:0; color:#730202;">本檔活動價格</h2>
+        <div class="prices">
+          <div class="price-tag"><span>建議售價</span><b>NT$520</b></div>
+          <div class="price-tag"><span>抽獎價 A</span><b>NT$450</b></div>
+          <div class="price-tag"><span>抽獎價 B</span><b>NT$350</b></div>
+        </div>
+
+        <div class="result" id="result">尚未抽獎，祝你抽中超值價！</div>
+
+        <button class="cta" id="resetBtn" type="button">重置再抽一次</button>
+        <p class="small">機率可後續調整（目前為示範值）：450 = 70%、350 = 30%。</p>
+      </aside>
+    </section>
+  </main>
+
+  <script>
+    const PROBABILITY = {
+      450: 0.7,
+      350: 0.3,
+    };
+
+    const drawBtn = document.getElementById('drawBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const result = document.getElementById('result');
+    const capsule = document.getElementById('capsule');
+
+    function drawPrice() {
+      const random = Math.random();
+      if (random < PROBABILITY[450]) return 450;
+      return 350;
+    }
+
+    drawBtn.addEventListener('click', () => {
+      drawBtn.disabled = true;
+      capsule.classList.remove('roll');
+      void capsule.offsetWidth;
+      capsule.classList.add('roll');
+      result.textContent = '扭蛋轉動中，請稍候...';
+
+      setTimeout(() => {
+        const price = drawPrice();
+        capsule.textContent = `NT$${price}`;
+        result.innerHTML = `🎉 恭喜抽中 <strong>NT$${price}</strong>！<br>立即用優惠價帶走咖啡禮盒吧。`;
+      }, 900);
+    });
+
+    resetBtn.addEventListener('click', () => {
+      drawBtn.disabled = false;
+      capsule.textContent = 'START';
+      result.textContent = '已重置完成，可以再抽一次！';
+    });
+  </script>
+</body>
+</html>
